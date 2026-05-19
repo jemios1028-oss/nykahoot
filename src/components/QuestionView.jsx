@@ -57,7 +57,7 @@ export default function QuestionView({ gameState, question, student }) {
 
   if (!question) return (
     <div className="mario-bg flex items-center justify-center" style={{ minHeight: '100vh' }}>
-      <div className="pixel text-white text-xs">LOADING...</div>
+      <div className="text-gray-400 text-sm">로딩 중...</div>
     </div>
   )
 
@@ -102,13 +102,13 @@ export default function QuestionView({ gameState, question, student }) {
                     <button
                       key={i}
                       onClick={() => submit(opt)}
-                      className="mario-btn border-2 border-black text-left p-4 flex items-start gap-2 active:scale-95"
+                      className="mario-btn border border-gray-300 text-left p-4 flex items-start gap-2 rounded"
                       style={{
                         backgroundColor: style.bg,
                         color: style.dark ? '#111' : '#fff',
                       }}
                     >
-                      <span className="pixel text-[10px] shrink-0 opacity-80 mt-0.5">{style.label}</span>
+                      <span className="text-xs shrink-0 opacity-80 mt-0.5">{style.label}</span>
                       <span className="text-sm font-bold leading-snug">{opt}</span>
                     </button>
                   )
@@ -129,8 +129,8 @@ export default function QuestionView({ gameState, question, student }) {
                 <button
                   type="submit"
                   disabled={!shortInput.trim()}
-                  className="mario-btn px-5 border-2 border-black text-black font-bold pixel text-[10px]"
-                  style={{ backgroundColor: '#fbd000' }}
+                  className="mario-btn px-5 border border-gray-300 text-gray-700 font-bold text-sm rounded"
+                  style={{ backgroundColor: '#e5e7eb' }}
                 >
                   제출
                 </button>
@@ -146,18 +146,18 @@ export default function QuestionView({ gameState, question, student }) {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               className="mario-panel p-6 text-center"
-              style={{ borderColor: isCorrect ? '#43b047' : '#e52521' }}
+              style={{ borderColor: isCorrect ? '#86efac' : '#fca5a5' }}
             >
-              <div className="text-5xl mb-3">{isCorrect ? '⭐' : '💀'}</div>
-              <div className="pixel text-lg mb-2" style={{ color: isCorrect ? '#43b047' : '#e52521', textShadow: '2px 2px 0 #000' }}>
-                {isCorrect ? 'PERFECT!' : 'MISS!'}
+              <div className="text-4xl mb-3">{isCorrect ? '✓' : '✗'}</div>
+              <div className="text-base font-bold mb-2" style={{ color: isCorrect ? '#16a34a' : '#dc2626' }}>
+                {isCorrect ? '정답!' : '오답'}
               </div>
               {isCorrect && (
-                <div className="pixel text-sm mb-3" style={{ color: '#fbd000' }}>
-                  +{earnedScore.toLocaleString()} PT
+                <div className="text-sm text-gray-500 mb-3">
+                  +{earnedScore.toLocaleString()} 점
                 </div>
               )}
-              <div className="text-white/50 text-xs mt-2">순위 발표를 기다리는 중...</div>
+              <div className="text-gray-400 text-xs mt-2">순위 발표를 기다리는 중...</div>
             </motion.div>
           )}
 
@@ -166,19 +166,19 @@ export default function QuestionView({ gameState, question, student }) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="mario-panel p-6 text-center"
-              style={{ borderColor: '#e52521' }}
+              style={{ borderColor: '#fca5a5' }}
             >
-              <div className="text-4xl mb-3">⏰</div>
-              <div className="pixel text-sm" style={{ color: '#e52521', textShadow: '2px 2px 0 #000' }}>
-                TIME UP!
+              <div className="text-3xl mb-3">⏰</div>
+              <div className="text-sm font-bold text-red-500">
+                시간 초과
               </div>
-              <div className="text-white/50 text-xs mt-3">순위 발표를 기다리는 중...</div>
+              <div className="text-gray-400 text-xs mt-3">순위 발표를 기다리는 중...</div>
             </motion.div>
           )}
         </AnimatePresence>
 
         {student && (
-          <div className="pixel text-[8px] text-center mt-auto pt-2" style={{ color: 'rgba(255,255,255,0.3)' }}>
+          <div className="text-xs text-center mt-auto pt-2 text-gray-300">
             {student.grade}-{student.class}반 · {student.nickname}
           </div>
         )}

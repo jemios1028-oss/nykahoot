@@ -58,33 +58,23 @@ export default function JoinPage() {
     <div className="mario-bg flex flex-col items-center justify-center p-4" style={{ minHeight: '100vh' }}>
 
       {/* 로고 */}
-      <motion.div
-        className="text-center mb-8"
-        initial={{ opacity: 0, y: -30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="text-2xl font-bold mb-3" style={{ color: '#fbd000', textShadow: '3px 3px 0 #000', fontFamily: "'Malgun Gothic', sans-serif" }}>
-          ⭐ 남양고 꿈든벨 ⭐
+      <div className="text-center mb-8">
+        <div className="text-xl font-bold mb-2" style={{ color: '#111' }}>
+          베타테스트
         </div>
-        <div className="text-white/60 text-sm">26-1 학기단위 프로젝트 [꿈:틀]</div>
-      </motion.div>
+        <div className="text-gray-500 text-sm">남양고등학교 교육과정부</div>
+      </div>
 
       {/* 카드 */}
-      <motion.div
-        className="mario-panel w-full max-w-sm p-6"
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.4, delay: 0.15 }}
-      >
-        <div className="pixel text-center text-xs mb-6" style={{ color: '#fbd000' }}>
-          PLAYER SETUP
+      <div className="mario-panel w-full max-w-sm p-6">
+        <div className="text-center text-xs text-gray-400 mb-6">
+          접속 정보 입력
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-2 gap-3 mb-4">
             <div>
-              <label className="pixel block text-xs mb-2" style={{ color: '#fbd000' }}>학년</label>
+              <label className="block text-xs font-medium text-gray-600 mb-2">학년</label>
               <input
                 type="number" value={grade} onChange={e => setGrade(e.target.value)}
                 min="1" max="6"
@@ -92,7 +82,7 @@ export default function JoinPage() {
               />
             </div>
             <div>
-              <label className="pixel block text-xs mb-2" style={{ color: '#fbd000' }}>반</label>
+              <label className="block text-xs font-medium text-gray-600 mb-2">반</label>
               <input
                 type="number" value={cls} onChange={e => setCls(e.target.value)}
                 min="1" max="20"
@@ -102,7 +92,7 @@ export default function JoinPage() {
           </div>
 
           <div className="mb-5">
-            <label className="pixel block text-xs mb-2" style={{ color: '#fbd000' }}>이름</label>
+            <label className="block text-xs font-medium text-gray-600 mb-2">이름</label>
             <input
               type="text" value={nickname} onChange={e => setNickname(e.target.value)}
               maxLength={12}
@@ -111,7 +101,7 @@ export default function JoinPage() {
           </div>
 
           {error && (
-            <div className="mb-4 px-3 py-2 border-2 border-[#e52521] text-[#e52521] text-xs text-center">
+            <div className="mb-4 px-3 py-2 border border-red-300 text-red-500 text-xs text-center rounded">
               {error}
             </div>
           )}
@@ -119,24 +109,15 @@ export default function JoinPage() {
           <button
             type="submit"
             disabled={loading}
-            className="mario-btn w-full py-3 text-white font-bold border-2 border-black"
-            style={{ backgroundColor: '#e52521' }}
+            className="mario-btn w-full py-3 text-white font-bold rounded"
+            style={{ backgroundColor: '#374151' }}
           >
-            <span className="pixel text-xs">
-              {loading ? 'LOADING...' : '▶  START!'}
+            <span className="text-sm">
+              {loading ? '접속 중...' : '접속하기'}
             </span>
           </button>
         </form>
-      </motion.div>
-
-      <motion.div
-        className="pixel mt-8 text-sm"
-        style={{ color: '#fbd000' }}
-        animate={{ opacity: [1, 0, 1] }}
-        transition={{ duration: 1, repeat: Infinity, ease: 'easeInOut' }}
-      >
-        INSERT COIN
-      </motion.div>
+      </div>
     </div>
   )
 }

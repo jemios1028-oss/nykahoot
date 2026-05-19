@@ -30,8 +30,8 @@ export default function Timer({ startedAt, timeLimit, onExpire }) {
   return (
     <div className="flex items-center gap-3 w-full">
       <div
-        className="pixel tabular-nums w-12 text-right shrink-0 text-xl"
-        style={{ color: urgent ? '#e52521' : '#fbd000' }}
+        className="tabular-nums w-12 text-right shrink-0 text-xl font-bold"
+        style={{ color: urgent ? '#dc2626' : '#374151' }}
       >
         {secs}
       </div>

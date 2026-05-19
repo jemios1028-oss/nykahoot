@@ -36,7 +36,7 @@ export default function RankingView({ student }) {
 
   if (loading) return (
     <div className="mario-bg flex items-center justify-center" style={{ minHeight: '100vh' }}>
-      <div className="pixel text-white text-xs">LOADING...</div>
+      <div className="text-gray-400 text-sm">로딩 중...</div>
     </div>
   )
 
@@ -49,10 +49,10 @@ export default function RankingView({ student }) {
 
         {/* 제목 */}
         <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="text-center">
-          <div className="pixel text-sm mb-1" style={{ color: '#fbd000', textShadow: '2px 2px 0 #000' }}>
-            ⭐ RANKING ⭐
+          <div className="text-base font-bold text-gray-800 mb-1">
+            순위 현황
           </div>
-          <p className="text-white/50 text-xs mt-2">다음 문제를 기다리는 중...</p>
+          <p className="text-gray-400 text-xs mt-2">다음 문제를 기다리는 중...</p>
         </motion.div>
 
         {/* 막대 그래프 */}
@@ -76,7 +76,7 @@ export default function RankingView({ student }) {
                   animate={{ opacity: 1 }}
                   transition={{ delay: i * 0.08 }}
                 >
-                  <div className="pixel text-[9px] mb-1.5 tabular-nums" style={{ color }}>
+                  <div className="text-[10px] mb-1.5 tabular-nums font-bold" style={{ color }}>
                     <CountUp target={score} />
                   </div>
                   <motion.div
@@ -99,7 +99,7 @@ export default function RankingView({ student }) {
             {rankings.map((r, i) => (
               <div
                 key={`${r.grade}-${r.class}`}
-                className="pixel text-[8px] text-center leading-tight"
+                className="text-[10px] text-center leading-tight font-medium"
                 style={{ width: 52, color: BAR_COLORS[i % BAR_COLORS.length] }}
               >
                 {r.grade}-{r.class}
@@ -120,21 +120,21 @@ export default function RankingView({ student }) {
                 initial={{ opacity: 0, x: -24 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 + i * 0.07 }}
-                className="flex items-center justify-between px-4 py-3 border-2"
+                className="flex items-center justify-between px-4 py-3 border rounded"
                 style={{
-                  borderColor: isMe ? '#fbd000' : 'white',
-                  background: isMe ? 'rgba(251,208,0,0.12)' : '#00146e',
-                  boxShadow: '0 4px 0 rgba(0,0,0,0.4)',
+                  borderColor: isMe ? '#2563eb' : '#e5e7eb',
+                  background: isMe ? 'rgba(37,99,235,0.06)' : '#fff',
+                  boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
                 }}
               >
                 <div className="flex items-center gap-3">
                   <span className="text-xl w-8 text-center">{medal}</span>
-                  <span className="font-bold text-sm" style={{ color: isMe ? '#fbd000' : '#fff' }}>
+                  <span className="font-bold text-sm" style={{ color: isMe ? '#2563eb' : '#111' }}>
                     {r.grade}학년 {r.class}반
                   </span>
-                  <span className="text-white/40 text-xs">{r.student_count}명</span>
+                  <span className="text-gray-400 text-xs">{r.student_count}명</span>
                 </div>
-                <span className="pixel text-xs tabular-nums" style={{ color: isMe ? '#fbd000' : '#fff' }}>
+                <span className="text-xs tabular-nums font-medium" style={{ color: isMe ? '#2563eb' : '#374151' }}>
                   {Number(r.total_score).toLocaleString()}
                 </span>
               </motion.div>
