@@ -12,6 +12,7 @@ export default function GamePage() {
   const [gameState, setGameState] = useState(null)
   const [question, setQuestion] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [lastAnswerResult, setLastAnswerResult] = useState(null)
 
   useEffect(() => {
     const id = localStorage.getItem('studentId')
@@ -69,6 +70,7 @@ export default function GamePage() {
             }
           }
 
+          if (next.phase === 'question_active') setLastAnswerResult(null)
           setGameState(next)
           if (next.current_question_id) {
             const { data: q } = await supabase.from('questions').select('*').eq('id', next.current_question_id).single()
@@ -95,9 +97,14 @@ export default function GamePage() {
     <>
       {phase === 'lobby' && <WaitingView student={student} />}
       {phase === 'question_active' && (
-        <QuestionView gameState={gameState} question={question} student={student} />
+        <QuestionView
+          gameState={gameState}
+          question={question}
+          student={student}
+          onAnswerSubmit={setLastAnswerResult}
+        />
       )}
-      {phase === 'ranking' && <RankingView student={student} />}
+      {phase === 'ranking' && <RankingView student={student} lastAnswerResult={lastAnswerResult} />}
       {phase === 'finished' && <FinishedView student={student} />}
     </>
   )

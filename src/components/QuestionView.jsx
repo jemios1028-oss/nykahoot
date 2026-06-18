@@ -14,17 +14,13 @@ function normalize(str) {
   return str.toLowerCase().replace(/\s+/g, '')
 }
 
-export default function QuestionView({ gameState, question, student }) {
+export default function QuestionView({ gameState, question, student, onAnswerSubmit }) {
   const [submitted, setSubmitted] = useState(false)
-  const [isCorrect, setIsCorrect] = useState(null)
-  const [earnedScore, setEarnedScore] = useState(0)
   const [shortInput, setShortInput] = useState('')
   const [expired, setExpired] = useState(false)
 
   useEffect(() => {
     setSubmitted(false)
-    setIsCorrect(null)
-    setEarnedScore(0)
     setShortInput('')
     setExpired(false)
   }, [question?.id])
@@ -40,8 +36,7 @@ export default function QuestionView({ gameState, question, student }) {
       ? Math.max(500, Math.round(1000 * (1 - 0.5 * (responseMs / timeLimitMs))))
       : 0
 
-    setIsCorrect(correct)
-    setEarnedScore(score)
+    onAnswerSubmit?.({ isCorrect: correct, earnedScore: score })
 
     await supabase.from('answers').upsert({
       student_id: student.id,
@@ -51,7 +46,7 @@ export default function QuestionView({ gameState, question, student }) {
       response_time_ms: responseMs,
       score,
     }, { onConflict: 'student_id,question_id' })
-  }, [submitted, question, student, gameState?.question_started_at])
+  }, [submitted, question, student, gameState?.question_started_at, onAnswerSubmit])
 
   const handleExpire = useCallback(() => setExpired(true), [])
 
@@ -146,18 +141,12 @@ export default function QuestionView({ gameState, question, student }) {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               className="mario-panel p-6 text-center"
-              style={{ borderColor: isCorrect ? '#43b047' : '#e52521' }}
             >
-              <div className="text-5xl mb-3">{isCorrect ? '⭐' : '💀'}</div>
-              <div className="pixel text-lg mb-2" style={{ color: isCorrect ? '#43b047' : '#e52521', textShadow: '2px 2px 0 #000' }}>
-                {isCorrect ? 'PERFECT!' : 'MISS!'}
+              <div className="text-5xl mb-3">✅</div>
+              <div className="pixel text-lg mb-2" style={{ color: '#43b047', textShadow: '2px 2px 0 #000' }}>
+                제출완료!
               </div>
-              {isCorrect && (
-                <div className="pixel text-sm mb-3" style={{ color: '#fbd000' }}>
-                  +{earnedScore.toLocaleString()} PT
-                </div>
-              )}
-              <div className="text-white/50 text-xs mt-2">순위 발표를 기다리는 중...</div>
+              <div className="text-white/50 text-xs mt-2">결과 화면을 기다리는 중...</div>
             </motion.div>
           )}
 

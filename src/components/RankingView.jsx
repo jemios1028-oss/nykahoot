@@ -23,7 +23,7 @@ function CountUp({ target }) {
   return val.toLocaleString()
 }
 
-export default function RankingView({ student }) {
+export default function RankingView({ student, lastAnswerResult }) {
   const [rankings, setRankings] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -54,6 +54,30 @@ export default function RankingView({ student }) {
           </div>
           <p className="text-white/50 text-xs mt-2">관리자가 다음 문제를 시작할 때까지 대기 중...</p>
         </motion.div>
+
+        {/* 내 답변 결과 */}
+        {lastAnswerResult !== null && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.85 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.1 }}
+            className="mario-panel p-5 text-center"
+            style={{ borderColor: lastAnswerResult.isCorrect ? '#43b047' : '#e52521' }}
+          >
+            <div className="text-5xl mb-3">{lastAnswerResult.isCorrect ? '⭐' : '💀'}</div>
+            <div
+              className="pixel text-lg mb-2"
+              style={{ color: lastAnswerResult.isCorrect ? '#43b047' : '#e52521', textShadow: '2px 2px 0 #000' }}
+            >
+              {lastAnswerResult.isCorrect ? '정답입니다!' : '틀렸습니다!'}
+            </div>
+            {lastAnswerResult.isCorrect && (
+              <div className="pixel text-sm" style={{ color: '#fbd000' }}>
+                +{lastAnswerResult.earnedScore.toLocaleString()} PT
+              </div>
+            )}
+          </motion.div>
+        )}
 
         {/* 막대 그래프 */}
         <div className="mario-panel p-5 overflow-x-auto">
