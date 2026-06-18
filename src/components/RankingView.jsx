@@ -50,9 +50,9 @@ export default function RankingView({ student }) {
         {/* 제목 */}
         <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="text-center">
           <div className="pixel text-sm mb-1" style={{ color: '#fbd000', textShadow: '2px 2px 0 #000' }}>
-            ⭐ RANKING ⭐
+            ⭐ 중간 결과 ⭐
           </div>
-          <p className="text-white/50 text-xs mt-2">다음 문제를 기다리는 중...</p>
+          <p className="text-white/50 text-xs mt-2">관리자가 다음 문제를 시작할 때까지 대기 중...</p>
         </motion.div>
 
         {/* 막대 그래프 */}

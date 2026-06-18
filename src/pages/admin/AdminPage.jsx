@@ -8,7 +8,7 @@ const ADMIN_PW = import.meta.env.VITE_ADMIN_PASSWORD
 const PHASE_LABEL = {
   lobby:           { text: 'LOBBY',    color: '#aaa',    bg: 'rgba(170,170,170,0.15)' },
   question_active: { text: 'LIVE',     color: '#43b047', bg: 'rgba(67,176,71,0.15)' },
-  ranking:         { text: 'RANKING',  color: '#fbd000', bg: 'rgba(251,208,0,0.15)' },
+  ranking:         { text: 'RESULT',   color: '#fbd000', bg: 'rgba(251,208,0,0.15)' },
   finished:        { text: 'FINISHED', color: '#e52521', bg: 'rgba(229,37,33,0.15)' },
 }
 
@@ -22,6 +22,7 @@ export default function AdminPage() {
   const [questions, setQuestions] = useState([])
   const [studentCount, setStudentCount] = useState(0)
   const [answeredCount, setAnsweredCount] = useState(0)
+  const [rankings, setRankings] = useState([])
   const [loading, setLoading] = useState(true)
 
   const [showForm, setShowForm] = useState(false)
@@ -50,6 +51,11 @@ export default function AdminPage() {
     if (!id) { setCurrentQuestion(null); return }
     const { data } = await supabase.from('questions').select('*').eq('id', id).single()
     setCurrentQuestion(data)
+  }, [])
+
+  const fetchRankings = useCallback(async () => {
+    const { data } = await supabase.rpc('get_class_rankings')
+    setRankings(data || [])
   }, [])
 
   useEffect(() => {
@@ -82,6 +88,14 @@ export default function AdminPage() {
 
     return () => supabase.removeChannel(channel)
   }, [authed, fetchQuestions, fetchStudentCount, fetchCurrentQuestion])
+
+  useEffect(() => {
+    if (gameState?.phase === 'ranking') {
+      fetchRankings()
+    } else {
+      setRankings([])
+    }
+  }, [gameState?.phase, fetchRankings])
 
   useEffect(() => {
     const questionId = currentQuestion?.id
@@ -369,6 +383,35 @@ export default function AdminPage() {
               </button>
             )}
 
+            {phase === 'ranking' && rankings.length > 0 && (
+              <div className="w-full mt-1 pt-4" style={{ borderTop: '2px solid rgba(255,255,255,0.12)' }}>
+                <div className="pixel text-[9px] mb-3" style={{ color: '#fbd000' }}>⭐ 중간 결과</div>
+                {(() => {
+                  const maxScore = Math.max(...rankings.map(r => Number(r.total_score)), 1)
+                  const medals = ['🥇', '🥈', '🥉']
+                  return (
+                    <div className="space-y-2">
+                      {rankings.map((r, i) => (
+                        <div key={`${r.grade}-${r.class}`} className="flex items-center gap-2">
+                          <span className="text-base w-6 text-center shrink-0">{medals[i] ?? i + 1}</span>
+                          <span className="text-white text-xs w-20 shrink-0">{r.grade}학년 {r.class}반</span>
+                          <div className="flex-1 h-3 border border-white/20 overflow-hidden" style={{ background: 'black' }}>
+                            <div
+                              className="h-full transition-[width] duration-700"
+                              style={{ width: `${Math.max(Number(r.total_score) / maxScore * 100, 2)}%`, backgroundColor: '#fbd000' }}
+                            />
+                          </div>
+                          <span className="pixel text-[8px] w-16 text-right shrink-0 tabular-nums" style={{ color: '#fbd000' }}>
+                            {Number(r.total_score).toLocaleString()}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )
+                })()}
+              </div>
+            )}
+
             {phase === 'question_active' && (
               <div className="flex-1 min-w-[200px]">
                 <div className="flex justify-between text-xs mb-1.5">
@@ -384,7 +427,16 @@ export default function AdminPage() {
                     style={{ width: `${answerPct}%`, backgroundColor: '#43b047' }}
                   />
                 </div>
-                <div className="text-[10px] text-white/30 mt-1">시간이 종료되면 자동으로 순위 표시</div>
+                <div className="flex items-center justify-between mt-2 gap-3">
+                  <div className="text-[10px] text-white/30">시간 종료 전 수동으로 결과 화면으로 넘길 수 있습니다</div>
+                  <button
+                    onClick={handleTimerExpire}
+                    className="mario-btn px-4 py-1.5 border-2 border-black font-bold text-black shrink-0"
+                    style={{ backgroundColor: '#fbd000' }}
+                  >
+                    <span className="pixel text-[9px]">결과 보기 ▶</span>
+                  </button>
+                </div>
               </div>
             )}
 
