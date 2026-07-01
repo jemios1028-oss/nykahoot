@@ -23,7 +23,7 @@ function CountUp({ target }) {
   return val.toLocaleString()
 }
 
-export default function RankingView({ student, lastAnswerResult }) {
+export default function RankingView({ student, lastAnswerResult, question }) {
   const [rankings, setRankings] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -56,26 +56,43 @@ export default function RankingView({ student, lastAnswerResult }) {
         </motion.div>
 
         {/* 내 답변 결과 */}
-        {lastAnswerResult !== null && (
+        {question && (
           <motion.div
             initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.1 }}
             className="mario-panel p-5 text-center"
-            style={{ borderColor: lastAnswerResult.isCorrect ? '#43b047' : '#e52521' }}
+            style={{
+              borderColor: lastAnswerResult
+                ? (lastAnswerResult.isCorrect ? '#43b047' : '#e52521')
+                : '#e52521',
+            }}
           >
-            <div className="text-5xl mb-3">{lastAnswerResult.isCorrect ? '⭐' : '💀'}</div>
+            <div className="text-5xl mb-3">
+              {lastAnswerResult ? (lastAnswerResult.isCorrect ? '⭐' : '💀') : '⏰'}
+            </div>
             <div
               className="pixel text-lg mb-2"
-              style={{ color: lastAnswerResult.isCorrect ? '#43b047' : '#e52521', textShadow: '2px 2px 0 #000' }}
+              style={{
+                color: lastAnswerResult
+                  ? (lastAnswerResult.isCorrect ? '#43b047' : '#e52521')
+                  : '#e52521',
+                textShadow: '2px 2px 0 #000',
+              }}
             >
-              {lastAnswerResult.isCorrect ? '정답입니다!' : '틀렸습니다!'}
+              {lastAnswerResult
+                ? (lastAnswerResult.isCorrect ? '정답입니다!' : '틀렸습니다!')
+                : '시간 초과!'}
             </div>
-            {lastAnswerResult.isCorrect && (
-              <div className="pixel text-sm" style={{ color: '#fbd000' }}>
+            {lastAnswerResult?.isCorrect && (
+              <div className="pixel text-sm mb-3" style={{ color: '#fbd000' }}>
                 +{lastAnswerResult.earnedScore.toLocaleString()} PT
               </div>
             )}
+            <div className="mt-3 pt-3" style={{ borderTop: '2px solid rgba(255,255,255,0.2)' }}>
+              <div className="text-white/50 text-xs mb-1.5 pixel" style={{ fontSize: '9px' }}>정 답</div>
+              <div className="text-white font-bold text-base leading-snug">{question.answer}</div>
+            </div>
           </motion.div>
         )}
 

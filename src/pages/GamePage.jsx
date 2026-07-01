@@ -104,7 +104,7 @@ export default function GamePage() {
           onAnswerSubmit={setLastAnswerResult}
         />
       )}
-      {phase === 'ranking' && <RankingView student={student} lastAnswerResult={lastAnswerResult} />}
+      {phase === 'ranking' && <RankingView student={student} lastAnswerResult={lastAnswerResult} question={question} />}
       {phase === 'finished' && <FinishedView student={student} />}
     </>
   )
